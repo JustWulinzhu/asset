@@ -17,16 +17,18 @@ public class UserRiskAssessmentImpl implements UserRiskAssessmentService {
     @Override
     public UserRiskRes getRiskByUserId(String userId) {
         UserRiskAssessment ret = userRiskAssessmentMapper.getRiskByUserId(userId);
-        UserRiskRes res = new UserRiskRes();
+
         if (ret != null) {
+            UserRiskRes res = new UserRiskRes();
             res.setUserId(ret.getUserId());
             res.setRiskLevel(ret.getRiskLevel());
             res.setRiskLevelName(RiskLevelEnum.getRiskNameByLevel(ret.getRiskLevel()));
             res.setRiskScore(ret.getRiskScore());
             res.setRiskPreference(ret.getRiskPreference());
             res.setCreateTime(ret.getCreateTime());
+            return res;
         }
-        return res;
+        return null;
     }
 
 }

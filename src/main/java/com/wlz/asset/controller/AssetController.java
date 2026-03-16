@@ -37,7 +37,9 @@ public class AssetController {
         UserKycRes retKyc = userDeepKycService.getKycByUserId(userId);
         log.info("用户{}的风险评估结果为：{}", userId, retRisk);
         log.info("用户{}的深度KYC结果为：{}", userId, retKyc);
-
+        if (retRisk == null || retKyc == null) {
+            return R.error("查询不到该用户信息！");
+        }
         RiskAssessmentRes ret = new RiskAssessmentRes();
         ret.setUserRiskRes(retRisk);
         ret.setUserKycRes(retKyc);
