@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wlz.asset.mapper.UserDeepKycMapper">
+
+    <!-- 结果集映射：数据库字段 → Java 实体类属性 -->
+    <resultMap id="UserDeepKycResultMap" type="com.wlz.asset.entity.UserDeepKyc">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="age" property="age" />
+        <result column="income" property="income" />
+        <result column="assets" property="assets" />
+        <result column="debt" property="debt" />
+        <result column="investment_experience" property="investmentExperience" />
+        <result column="investment_goal" property="investmentGoal" />
+        <result column="liquidity_demand" property="liquidityDemand"/>
+    </resultMap>
+
+    <select id="getKycByUserId" resultMap="UserDeepKycResultMap">
+        SELECT * FROM user_deep_kyc WHERE user_id = #{userId}
+    </select>
+
+</mapper>

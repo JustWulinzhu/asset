@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wlz.asset.mapper.UserRiskAssessmentMapper">
+
+    <!-- 结果集映射：数据库字段 → Java 实体类属性（驼峰命名适配） -->
+    <resultMap id="UserRiskAssessmentResultMap" type="com.wlz.asset.entity.UserRiskAssessment">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="risk_level" property="riskLevel" />
+        <result column="risk_score" property="riskScore" />
+        <result column="risk_preference" property="riskPreference" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <select id="getRiskByUserId" resultMap="UserRiskAssessmentResultMap">
+        SELECT * FROM user_risk_assessment WHERE user_id = #{userId}
+    </select>
+
+</mapper>
