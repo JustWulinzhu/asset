@@ -21,7 +21,7 @@ public class AssetApplication {
                 "║                                                                            ║\n" +
                 "║                    🎉Welcome to Asset Management System 🎉                 ║\n" +
                 "║                                                                            ║\n" +
-                "║          🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀         ║\n" +                "║                                                                            ║\n" +
+                "║          🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀         ║\n" +
                 "╚════════════════════════════════════════════════════════════════════════════╝\n";
         log.info(banner);
 	}
