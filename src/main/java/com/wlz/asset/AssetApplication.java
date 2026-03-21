@@ -12,7 +12,18 @@ public class AssetApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AssetApplication.class, args);
-        log.info("AssetApplication启动成功 ᵔ◡ᵔ ᵔ◡ᵔ ᵔ◡ᵔ ᵔ◡ᵔ ᵔ◡ᵔ");
+        String banner = "\n" +
+                "╔════════════════════════════════════════════════════════════════════════════╗\n" +
+                "║                                                                            ║\n" +
+                "║                   ✨✨✨ AssetApplication 启动成功 ✨✨✨                  ║\n" +
+                "║                                                                            ║\n" +
+                "║          🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀         ║\n" +
+                "║                                                                            ║\n" +
+                "║                    🎉Welcome to Asset Management System 🎉                 ║\n" +
+                "║                                                                            ║\n" +
+                "║          🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀 🚀         ║\n" +                "║                                                                            ║\n" +
+                "╚════════════════════════════════════════════════════════════════════════════╝\n";
+        log.info(banner);
 	}
 
 }
