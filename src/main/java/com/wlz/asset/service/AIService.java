@@ -1,10 +1,9 @@
 package com.wlz.asset.service;
 
 /**
- * AI调用服务
- * 注：为了向后兼容，保留原接口名称
+ * AI服务统一接口
  */
-public interface HuoshanService {
+public interface AIService {
 
     /**
      * 普通聊天调用
@@ -14,10 +13,11 @@ public interface HuoshanService {
     String chatCall(String input);
 
     /**
-     * 自然语言转SQL
+     * 自然语言转SQL调用
      * @param input 自然语言描述
+     * @param systemPrompt 系统提示词
      * @return 生成的SQL语句
      */
-    String nlToSql(String input);
+    String generateSQL(String input, String systemPrompt);
 
 }

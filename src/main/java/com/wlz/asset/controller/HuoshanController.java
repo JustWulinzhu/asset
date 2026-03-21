@@ -26,5 +26,11 @@ public class HuoshanController {
         return R.success(result);
     }
 
+    @PostMapping("/nl2sql")
+    public R<String> nl2sql(@RequestBody String input) {
+        String result = huoshanService.nlToSql(input);
+        return R.success(result);
+    }
+
 }
 
