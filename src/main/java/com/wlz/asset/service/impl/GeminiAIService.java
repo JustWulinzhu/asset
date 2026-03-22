@@ -1,26 +1,26 @@
 package com.wlz.asset.service.impl;
 
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import lombok.extern.slf4j.Slf4j;
-import jakarta.annotation.Resource;
+import com.alibaba.fastjson2.JSON;
 import com.wlz.asset.config.AIConfig;
 import com.wlz.asset.service.AIService;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.wlz.asset.dto.res.ai.AIChatResponse;
 import org.springframework.web.client.RestTemplate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
-public class DeepseekAIService implements AIService {
+public class GeminiAIService implements AIService {
 
     @Resource
     private RestTemplate restTemplate;
@@ -66,45 +66,68 @@ public class DeepseekAIService implements AIService {
     }
 
     /**
-     * 调用deepseek API
+     * 调用谷歌geminiAPI
      */
     private String callAI(String input, List<Map<String, String>> messages) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.set("Authorization", "Bearer " + aiConfig.getDeepseek().getApiKey());
+        httpHeaders.set("x-goog-api-key", aiConfig.getGemini().getApiKey());
 
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", aiConfig.getDeepseek().getModel());
-        requestBody.put("messages", messages);
+        // contents 是核心：包含角色（user）和提问内容
+        List<Map<String, Object>> contents = List.of(
+                Map.of(
+                        "role", "user",
+                        "parts", List.of(Map.of("text", input))
+                )
+        );
+        requestBody.put("contents", contents);
 
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
 
         try {
-            ResponseEntity<AIChatResponse> response = restTemplate.postForEntity(
-                    aiConfig.getDeepseek().getApiUrl(),
+            String url = aiConfig.getGemini().getApiUrl() + "/" + aiConfig.getGemini().getModel() + ":generateContent";
+            log.info("Gemini API请求URL: {}", url);
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    url,
                     requestEntity,
-                    AIChatResponse.class
+                    String.class
             );
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                AIChatResponse responseBody = response.getBody();
-                log.info("Deepseek API响应: {}", responseBody);
-
-                // 提取返回内容
-                StringBuilder sb = new StringBuilder();
-                responseBody.getChoices().forEach(choice -> {
-                    sb.append(choice.getMessage().getContent());
-                });
-
-                log.info("Deepseek API响应内容: {}", sb.toString());
-                return sb.toString();
+                String responseBody = response.getBody();
+                log.info("Gemini API响应: {}", responseBody);
+                String result = parseGeminiResponse(responseBody);
+                log.info("Gemini API format响应: {}", result);
+                return result;
             } else {
-                log.error("Deepseek API响应失败: {}", response.getStatusCode());
+                log.error("Gemini API响应失败: {}", response.getStatusCode());
                 return null;
             }
         } catch (Exception e) {
-            log.error("Deepseek API调用异常: {}", e.getMessage(), e);
+            log.error("Gemini API调用异常: {}", e.getMessage(), e);
             return null;
+        }
+    }
+
+    /**
+     * 解析 Gemini 响应体，提取核心文本
+     * @param responseBody Gemini 返回的 JSON 字符串
+     * @return 生成的文本内容
+     */
+    private String parseGeminiResponse(String responseBody) {
+        try {
+            // 用 fastjson2 解析 JSON（需引入依赖：com.alibaba.fastjson2:fastjson2:2.0.42）
+            Map<String, Object> responseMap = JSON.parseObject(responseBody);
+            List<Map<String, Object>> candidates = (List<Map<String, Object>>) responseMap.get("candidates");
+            if (candidates == null || candidates.isEmpty()) {
+                return "Gemini 未返回有效内容";
+            }
+            Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
+            List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
+            return parts.get(0).get("text").toString();
+        } catch (Exception e) {
+            throw new RuntimeException("解析 Gemini 响应失败：" + e.getMessage(), e);
         }
     }
 

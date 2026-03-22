@@ -67,6 +67,8 @@ public class ZhipuAIService implements AIService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", aiConfig.getZhipu().getModel());
         requestBody.put("messages", messages);
+//        requestBody.put("stream", true);
+        log.info("智谱API请求: {}", JSON.toJSONString(requestBody));
 
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
 
@@ -105,7 +107,7 @@ public class ZhipuAIService implements AIService {
     private List<Map<String, String>> buildDefaultMessages(String input) {
         List<Map<String, String>> messages = new ArrayList<>();
         Map<String, String> content = new HashMap<>();
-        content.put("role", "system");
+        content.put("role", "user");
         content.put("content", input);
         messages.add(content);
         return messages;

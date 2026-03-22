@@ -32,6 +32,11 @@ public class AIConfig {
      */
     private Deepseek deepseek = new Deepseek();
 
+    /**
+     * Deepseek API配置
+     */
+    private Gemini gemini = new Gemini();
+
     @Data
     public static class Huoshan {
         /**
@@ -66,7 +71,7 @@ public class AIConfig {
         /**
          * 模型名称
          */
-        private String model = "glm-5";
+        private String model = "glm-4.7";
 
     }
 
@@ -87,6 +92,25 @@ public class AIConfig {
          * 模型名称
          */
         private String model = "deepseek-reasoner";
+
+    }
+
+    @Data
+    public static class Gemini {
+        /**
+         * API地址
+         */
+        private String apiUrl;
+
+        /**
+         * API密钥
+         */
+        private String apiKey;
+
+        /**
+         * 模型名称
+         */
+        private String model = "gemini-3-flash-preview";
 
     }
 

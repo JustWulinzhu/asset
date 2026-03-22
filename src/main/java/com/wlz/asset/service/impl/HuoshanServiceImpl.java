@@ -1,5 +1,6 @@
 package com.wlz.asset.service.impl;
 
+import com.wlz.asset.config.AIConfig;
 import com.wlz.asset.dto.ColumnMetaDto;
 import com.wlz.asset.dto.TableMetaDto;
 import com.wlz.asset.mapper.DbMetadataMapper;
@@ -24,8 +25,12 @@ public class HuoshanServiceImpl implements HuoshanService {
     @Resource
     private AIServiceFactory aiServiceFactory;
 
+    @Resource
+    private AIConfig aiConfig;
+
     @Override
     public String chatCall(String input) {
+        aiConfig.setProvider("gemini");
         AIService aiService = aiServiceFactory.getCurrentAIService();
         String response = aiService.chatCall(input);
         return response != null ? response : "Error: AI服务响应为空";
