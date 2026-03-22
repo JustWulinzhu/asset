@@ -1,6 +1,7 @@
 package com.wlz.asset.service;
 
 import com.wlz.asset.config.AIConfig;
+import com.wlz.asset.service.impl.DeepseekAIService;
 import com.wlz.asset.service.impl.HuoshanAIService;
 import com.wlz.asset.service.impl.ZhipuAIService;
 import jakarta.annotation.Resource;
@@ -22,6 +23,9 @@ public class AIServiceFactory {
     @Resource
     private ZhipuAIService zhipuAIService;
 
+    @Resource
+    private DeepseekAIService deepseekAIService;
+
     /**
      * 获取当前配置的AI服务
      * @return AI服务实例
@@ -30,6 +34,7 @@ public class AIServiceFactory {
         return switch (aiConfig.getProvider().toLowerCase()) {
             case "huoshan" -> huoshanAIService;
             case "zhipu" -> zhipuAIService;
+            case "deepseek" -> deepseekAIService;
             default -> {
                 log.warn("未知的AI服务提供商: {}, 默认使用火山引擎", aiConfig.getProvider());
                 yield huoshanAIService;
@@ -46,6 +51,7 @@ public class AIServiceFactory {
         return switch (provider.toLowerCase()) {
             case "huoshan" -> huoshanAIService;
             case "zhipu" -> zhipuAIService;
+            case "deepseek" -> deepseekAIService;
             default -> throw new IllegalArgumentException("不支持的AI服务提供商: " + provider);
         };
     }

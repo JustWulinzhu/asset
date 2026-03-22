@@ -27,6 +27,11 @@ public class AIConfig {
      */
     private Zhipu zhipu = new Zhipu();
 
+    /**
+     * Deepseek API配置
+     */
+    private Deepseek deepseek = new Deepseek();
+
     @Data
     public static class Huoshan {
         /**
@@ -43,6 +48,7 @@ public class AIConfig {
          * 模型名称
          */
         private String model = "doubao-seed-2-0-pro-260215";
+
     }
 
     @Data
@@ -61,5 +67,27 @@ public class AIConfig {
          * 模型名称
          */
         private String model = "glm-5";
+
     }
+
+    @Data
+    public static class Deepseek {
+
+        /**
+         * API地址
+         */
+        private String apiUrl;
+
+        /**
+         * API密钥
+         */
+        private String apiKey;
+
+        /**
+         * 模型名称
+         */
+        private String model = "deepseek-reasoner";
+
+    }
+
 }

@@ -73,7 +73,6 @@ public class HuoshanServiceImpl implements HuoshanService {
         if (sql == null) {
             return "Error: AI服务未返回有效响应";
         }
-
         if (Objects.equals(sql, "无法生成合理的SQL")) {
             return sql;
         } else {
