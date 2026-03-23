@@ -2,6 +2,7 @@ package com.wlz.asset.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.wlz.asset.config.AIConfig;
+import com.wlz.asset.dto.res.ai.AIChatResponse;
 import com.wlz.asset.service.AIService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -65,10 +66,50 @@ public class GeminiAIService implements AIService {
         return null;
     }
 
+    private String callAI(String input, List<Map<String, String>> messages) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.set("Authorization", "Bearer " + aiConfig.getGemini().getApiKey());
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("model", aiConfig.getGemini().getModel());
+        requestBody.put("messages", messages);
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
+
+        try {
+            ResponseEntity<AIChatResponse> response = restTemplate.postForEntity(
+                    aiConfig.getGemini().getApiUrl(),
+                    requestEntity,
+                    AIChatResponse.class
+            );
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                AIChatResponse responseBody = response.getBody();
+                log.info("Gemini API响应: {}", responseBody);
+
+                // 提取返回内容
+                StringBuilder sb = new StringBuilder();
+                responseBody.getChoices().forEach(choice -> {
+                    sb.append(choice.getMessage().getContent());
+                });
+
+                log.info("Gemini API响应内容: {}", sb.toString());
+                return sb.toString();
+            } else {
+                log.error("Gemini API响应失败: {}", response.getStatusCode());
+                return null;
+            }
+        } catch (Exception e) {
+            log.error("Gemini API调用异常: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
     /**
      * 调用谷歌geminiAPI
      */
-    private String callAI(String input, List<Map<String, String>> messages) {
+    private String callAIbak(String input, List<Map<String, String>> messages) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.set("x-goog-api-key", aiConfig.getGemini().getApiKey());
