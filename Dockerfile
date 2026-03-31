@@ -1,5 +1,5 @@
 # 基础镜像：选择官方的Java 8/11镜像（根据你的SpringBoot项目JDK版本选）
-FROM eclipse-temurin:17-jre-alpin
+FROM eclipse-temurin:17-jre-alpine
 
 #构建者
 MAINTAINER wulinzhu
