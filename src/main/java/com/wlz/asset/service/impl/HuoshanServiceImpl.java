@@ -30,7 +30,7 @@ public class HuoshanServiceImpl implements HuoshanService {
 
     @Override
     public String chatCall(String input) {
-        aiConfig.setProvider("gemini");
+        aiConfig.setProvider("zhipu");
         AIService aiService = aiServiceFactory.getCurrentAIService();
         String response = aiService.chatCall(input);
         return response != null ? response : "Error: AI服务响应为空";
